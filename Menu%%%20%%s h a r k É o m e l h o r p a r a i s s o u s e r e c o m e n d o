@@ -144,7 +144,7 @@ local allowedPlaceIds = {
     113494949872227
 }
 
-local kickMessage = "usa no jogo certo krai (Mini City)"
+local kickMessage = "usa no jogo certo krai"
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -169,23 +169,22 @@ if not isAllowed() then
     end)
 end
 
-
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
 -- ========== CONFIG ==========
-local MESSAGE_TEXT = "Shark Menu"                 -- texto mostrado
-local FONT = Enum.Font.GothamBlack             -- fonte (troque se quiser)
-local DISPLAY_TIME = 6.5                       -- tempo visível antes do fade out (s)
-local ENTRY_TIME = 0.35                        -- tempo da entrada (s)
-local EXIT_TIME = 0.6                          -- tempo do fade out (s)
-local RED_COLOR = Color3.fromRGB(137, 207, 240)    -- cor direita
-local WHITE_COLOR = Color3.fromRGB(245,245,245)-- cor esquerda
-local TEXT_AREA = UDim2.new(0.9, 0, 0.28, 0)   -- largura/altura do texto (ajuste)
-local TEXT_STROKE = 0.7                        -- stroke transparency (0 mais forte)
+local MESSAGE_TEXT = "Shark Menu"                 
+local FONT = Enum.Font.GothamBlack             
+local DISPLAY_TIME = 6.5                       
+local ENTRY_TIME = 0.35                        
+local EXIT_TIME = 0.6                          
+local RED_COLOR = Color3.fromRGB(137, 207, 240)    
+local WHITE_COLOR = Color3.fromRGB(245,245,245)
+local TEXT_AREA = UDim2.new(0.9, 0, 0.28, 0)   
+local TEXT_STROKE = 0.7                        
 -- ==============================
 
--- pega parent seguro (gethui se disponível em exploits)
+-- pega parent seguro
 local function getRootGui()
     local ok, root = pcall(function() return gethui() end)
     if ok and root then return root end
@@ -208,71 +207,67 @@ screenGui.IgnoreGuiInset = true
 screenGui.Parent = Root
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- label base invisível: serve como molde para clones
+-- label base invisível
 local baseLabel = Instance.new("TextLabel", screenGui)
 baseLabel.Name = "BaseLabel"
 baseLabel.AnchorPoint = Vector2.new(0.5, 0.5)
-baseLabel.Position = UDim2.new(0.5, 0, 0.5, 0)  -- centro da tela
+baseLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
 baseLabel.Size = TEXT_AREA
 baseLabel.BackgroundTransparency = 1
 baseLabel.Text = MESSAGE_TEXT
 baseLabel.TextScaled = true
 baseLabel.Font = FONT
 baseLabel.TextWrapped = true
-baseLabel.TextTransparency = 1   -- invisível (apenas molde)
+baseLabel.TextTransparency = 1
 baseLabel.ZIndex = 10
 
--- máscara esquerda (clipa a metade esquerda)
+-- máscara esquerda
 local leftMask = Instance.new("Frame", screenGui)
 leftMask.Name = "LeftMask"
 leftMask.AnchorPoint = Vector2.new(0.5, 0.5)
 leftMask.Position = baseLabel.Position
-leftMask.Size = UDim2.new(0.5, 0, baseLabel.Size.Y.Scale, 0) -- metade da largura
+leftMask.Size = UDim2.new(0.5, 0, baseLabel.Size.Y.Scale, 0)
 leftMask.BackgroundTransparency = 1
 leftMask.ClipsDescendants = true
 leftMask.ZIndex = 20
 
--- texto visível na esquerda (escuro/claro sobre branco)
+-- texto visível na esquerda
 local leftLabel = baseLabel:Clone()
 leftLabel.Parent = leftMask
 leftLabel.Name = "LeftLabel"
 leftLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 leftLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-leftLabel.Size = UDim2.new(1.98, 0, 1, 0) -- aumentar largura para que a parte direita seja cortada pela máscara
+leftLabel.Size = UDim2.new(1.98, 0, 1, 0)
 leftLabel.BackgroundTransparency = 1
 leftLabel.TextTransparency = 0
 leftLabel.TextColor3 = WHITE_COLOR
 leftLabel.TextStrokeTransparency = TEXT_STROKE
 leftLabel.ZIndex = 21
 
--- máscara direita (clipa a metade direita)
+-- máscara direita
 local rightMask = Instance.new("Frame", screenGui)
 rightMask.Name = "RightMask"
 rightMask.AnchorPoint = Vector2.new(0.5, 0.5)
--- posicionamos a máscara deslocada para a direita; usando Size igual à metade para cortar
 rightMask.Position = baseLabel.Position
 rightMask.Size = UDim2.new(0.5, 0, baseLabel.Size.Y.Scale, 0)
 rightMask.BackgroundTransparency = 1
 rightMask.ClipsDescendants = true
 rightMask.ZIndex = 22
 
--- texto visível na direita (branco sobre vermelho)
+-- texto visível na direita
 local rightLabel = baseLabel:Clone()
 rightLabel.Parent = rightMask
 rightLabel.Name = "RightLabel"
 rightLabel.AnchorPoint = Vector2.new(0.5, 0.5)
 rightLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
-rightLabel.Size = UDim2.new(1.98, 0, 1, 0) -- largura maior para garantir o corte perfeito
+rightLabel.Size = UDim2.new(1.98, 0, 1, 0)
 rightLabel.BackgroundTransparency = 1
 rightLabel.TextTransparency = 0
 rightLabel.TextColor3 = RED_COLOR
 rightLabel.TextStrokeTransparency = TEXT_STROKE
 rightLabel.ZIndex = 23
 
--- Obs: para o efeito de corte funcionar bem, cada máscara mostra a mesma label aumentada
--- e a própria máscara faz o recorte vertical (metade esquerda / metade direita).
-
--- divisória invisível (apenas para alinhamento visual opcional)
+-- divisória invisível
 local divider = Instance.new("Frame", screenGui)
 divider.Name = "Divider"
 divider.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -280,15 +275,14 @@ divider.Position = baseLabel.Position
 divider.Size = UDim2.new(0, 2, baseLabel.Size.Y.Scale, 0)
 divider.BackgroundColor3 = Color3.fromRGB(230,230,230)
 divider.BorderSizePixel = 0
-divider.BackgroundTransparency = 1 -- mantemos invisível (sem fundo)
+divider.BackgroundTransparency = 1
 divider.ZIndex = 30
 
--- ENTRADA: fade-in das duas metades + pequeno "pop" de escala
+-- ENTRADA
 local tInfo = TweenInfo.new(ENTRY_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
--- como não temos fundo, animamos apenas a opacidade do texto
 TweenService:Create(leftLabel, tInfo, {TextTransparency = 0}):Play()
 TweenService:Create(rightLabel, tInfo, {TextTransparency = 0}):Play()
--- pop com UIScale em ambos
+
 local function pop(obj, dur)
     local us = Instance.new("UIScale", obj)
     us.Scale = 0.7
@@ -299,13 +293,13 @@ end
 pop(leftLabel, ENTRY_TIME + 0.05)
 pop(rightLabel, ENTRY_TIME + 0.05)
 
--- Mantém visível pelo DISPLAY_TIME
+-- Mantém visível
 local start = tick()
 while tick() - start < DISPLAY_TIME do
     RunService.Heartbeat:Wait()
 end
 
--- SAÍDA: fade out suave
+-- SAÍDA
 local exitInfo = TweenInfo.new(EXIT_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
 TweenService:Create(leftLabel, exitInfo, {TextTransparency = 1}):Play()
 TweenService:Create(rightLabel, exitInfo, {TextTransparency = 1}):Play()
@@ -315,7 +309,6 @@ wait(EXIT_TIME + 0.03)
 if screenGui and screenGui.Parent then
     screenGui:Destroy()
 end
-
 
 --// Serviços
 local CoreGui = game:GetService("CoreGui")
@@ -329,7 +322,7 @@ local LocalPlayer = Players.LocalPlayer
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Parent = CoreGui
 ScreenGui.ResetOnSpawn = false
-ScreenGui.Name = "teste"
+ScreenGui.Name = "SharkMenuV2"
 
 --// Menu Principal
 local MainFrame = Instance.new("Frame", ScreenGui)
@@ -370,7 +363,7 @@ MinBtn.TextColor3 = Color3.fromRGB(200,200,200)
 MinBtn.Font = Enum.Font.GothamBold
 MinBtn.TextSize = 18
 
--- Fechar (X)
+-- Fechar
 local CloseBtn = Instance.new("TextButton", TopBar)
 CloseBtn.Size = UDim2.new(0,35,0,35)
 CloseBtn.Position = UDim2.new(1,-35,0,0)
@@ -465,30 +458,27 @@ TituloInicio.Font = Enum.Font.GothamBold
 TituloInicio.TextSize = 18
 TituloInicio.TextXAlignment = Enum.TextXAlignment.Center
 
--- 🔽 ADICIONE A FOTO AQUI 🔽
+-- Foto do Dev
 local FotoDev = Instance.new("ImageLabel", TabInicio)
 FotoDev.Size = UDim2.new(0, 80, 0, 80)
-FotoDev.Position = UDim2.new(0.5, -40, 0, 45) -- Centralizado abaixo do título
+FotoDev.Position = UDim2.new(0.5, -40, 0, 45)
 FotoDev.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 FotoDev.BorderSizePixel = 0
-FotoDev.Image = "rbxassetid://116353344853224" -- 🔴 SUBSTITUA pelo ID da sua imagem
+FotoDev.Image = "rbxassetid://116353344853224"
 Instance.new("UICorner", FotoDev).CornerRadius = UDim.new(0, 10)
 
--- Adicionar uma borda na foto
 local FotoStroke = Instance.new("UIStroke", FotoDev)
 FotoStroke.Color = Color3.fromRGB(0, 255, 140)
 FotoStroke.Thickness = 2
 
--- Informações do Desenvolvedor
+-- Informações
 CreateInfoLabel(TabInicio, "🧑‍💻 Desenvolvedor: thziin_01")
 CreateInfoLabel(TabInicio, "🎮 Versão: 2.0")
 
--- Informações do Jogador
 local playerInfo = CreateInfoLabel(TabInicio, "👤 Jogador: " .. LocalPlayer.Name)
 local displayInfo = CreateInfoLabel(TabInicio, "📛 Display: " .. LocalPlayer.DisplayName)
 local userIdInfo = CreateInfoLabel(TabInicio, "🆔 User ID: " .. LocalPlayer.UserId)
 
--- Informações do Jogo
 local gameName = "Carregando..."
 local success, result = pcall(function()
     return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name
@@ -502,10 +492,8 @@ end
 local gameInfo = CreateInfoLabel(TabInicio, "🎯 Jogo: " .. gameName)
 local placeIdInfo = CreateInfoLabel(TabInicio, "📍 Place ID: " .. game.PlaceId)
 
--- Contador de Jogadores
 local playerCountInfo = CreateInfoLabel(TabInicio, "👥 Jogadores no Servidor: " .. #Players:GetPlayers())
 
--- Atualizar contador de jogadores automaticamente
 Players.PlayerAdded:Connect(function()
     playerCountInfo.Text = "👥 Jogadores no Servidor: " .. #Players:GetPlayers()
 end)
@@ -514,10 +502,8 @@ Players.PlayerRemoving:Connect(function()
     playerCountInfo.Text = "👥 Jogadores no Servidor: " .. #Players:GetPlayers()
 end)
 
--- Data e Hora
 local timeInfo = CreateInfoLabel(TabInicio, "🕒 Data/Hora: Carregando...")
 
--- Atualizar hora a cada segundo
 spawn(function()
     while wait(1) do
         local currentTime = os.date("%d/%m/%Y %H:%M:%S")
@@ -525,17 +511,14 @@ spawn(function()
     end
 end)
 
--- Status do Menu
 CreateInfoLabel(TabInicio, "✅ Status: Menu Carregado com Sucesso!")
 CreateInfoLabel(TabInicio, "🔧 Total de Funções: 20+")
 CreateInfoLabel(TabInicio, "📱 Plataforma: " .. (UserInputService.TouchEnabled and "Mobile" or "PC"))
 
--- Espaçamento
 local espaco = Instance.new("Frame", TabInicio)
 espaco.Size = UDim2.new(1,0,0,10)
 espaco.BackgroundTransparency = 1
 
--- Créditos Finais
 local creditos = Instance.new("TextLabel", TabInicio)
 creditos.Size = UDim2.new(1,-10,0,30)
 creditos.BackgroundTransparency = 1
@@ -547,7 +530,7 @@ creditos.TextXAlignment = Enum.TextXAlignment.Center
 
 --// Funções de Componentes
 
--- 🔘 Toggle moderno (Switch)
+-- 🔘 Toggle moderno
 local function AddToggle(Parent, Text, Callback)
     local Frame = Instance.new("Frame", Parent)
     Frame.Size = UDim2.new(1,-10,0,35)
@@ -577,23 +560,35 @@ local function AddToggle(Parent, Text, Callback)
     Instance.new("UICorner", Knob).CornerRadius = UDim.new(1,0)
 
     local Enabled = false
+    
+    local function toggleState()
+        Enabled = not Enabled
+        TweenService:Create(Knob, TweenInfo.new(0.2), {
+            Position = Enabled and UDim2.new(1,-19,0.5,-9) or UDim2.new(0,1,0.5,-9),
+            BackgroundColor3 = Enabled and Color3.fromRGB(0,200,100) or Color3.fromRGB(200,200,200)
+        }):Play()
+        TweenService:Create(Switch, TweenInfo.new(0.2), {
+            BackgroundColor3 = Enabled and Color3.fromRGB(0,120,60) or Color3.fromRGB(60,60,60)
+        }):Play()
+        if Callback then
+            Callback(Enabled)
+        end
+    end
+
+    -- Suporte para PC e Mobile
     Switch.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            Enabled = not Enabled
-            TweenService:Create(Knob, TweenInfo.new(0.2), {
-                Position = Enabled and UDim2.new(1,-19,0.5,-9) or UDim2.new(0,1,0.5,-9),
-                BackgroundColor3 = Enabled and Color3.fromRGB(0,200,100) or Color3.fromRGB(200,200,200)
-            }):Play()
-            TweenService:Create(Switch, TweenInfo.new(0.2), {
-                BackgroundColor3 = Enabled and Color3.fromRGB(0,120,60) or Color3.fromRGB(60,60,60)
-            }):Play()
-            if Callback then
-                Callback(Enabled)
-            end
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            toggleState()
         end
     end)
     
-    return {Set = function(state) Enabled = state end}
+    return {
+        Set = function(state) 
+            Enabled = state
+            toggleState()
+        end,
+        Get = function() return Enabled end
+    }
 end
 
 -- Slider funcional
@@ -643,23 +638,40 @@ local function AddSlider(Parent, Text, Min, Max, Default, Callback)
         if Callback then Callback(Value) end
     end
 
-    BarBack.MouseButton1Down:Connect(function()
+    local function startDragging()
         draggingSlider = true
-        local mouseX = UserInputService:GetMouseLocation().X
-        local relative = (mouseX - BarBack.AbsolutePosition.X)/BarBack.AbsoluteSize.X
-        setPercent(relative)
-    end)
-    Knob.MouseButton1Down:Connect(function() draggingSlider = true end)
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then draggingSlider = false end
-    end)
-    RunService.RenderStepped:Connect(function()
+    end
+
+    local function updateDragging()
         if draggingSlider then
-            local mouseX = UserInputService:GetMouseLocation().X
-            local relative = (mouseX - BarBack.AbsolutePosition.X)/BarBack.AbsoluteSize.X
+            local mousePos = UserInputService:GetMouseLocation()
+            local barAbsolutePos = BarBack.AbsolutePosition
+            local barAbsoluteSize = BarBack.AbsoluteSize
+            
+            local relative = (mousePos.X - barAbsolutePos.X) / barAbsoluteSize.X
             setPercent(relative)
         end
+    end
+
+    local function stopDragging()
+        draggingSlider = false
+    end
+
+    -- Suporte para PC
+    BarBack.MouseButton1Down:Connect(startDragging)
+    Knob.MouseButton1Down:Connect(startDragging)
+    
+    -- Suporte para Mobile
+    BarBack.TouchLongPress:Connect(startDragging)
+    Knob.TouchLongPress:Connect(startDragging)
+
+    UserInputService.InputEnded:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then 
+            stopDragging() 
+        end
     end)
+
+    RunService.RenderStepped:Connect(updateDragging)
 
     setPercent((Default-Min)/(Max-Min))
 end
@@ -676,6 +688,11 @@ local function AddButton(Parent, Text, Callback)
     Instance.new("UICorner", Btn).CornerRadius = UDim.new(0,6)
 
     Btn.MouseButton1Click:Connect(function()
+        if Callback then Callback() end
+    end)
+    
+    -- Suporte para Mobile
+    Btn.TouchTap:Connect(function()
         if Callback then Callback() end
     end)
 end
@@ -746,8 +763,6 @@ Players.PlayerRemoving:Connect(removerHitBox)
 RunService.RenderStepped:Connect(function()
 	if HitBoxAtivo then
 		atualizarHitBoxes()
-	else
-		limparTodasHitBoxes()
 	end
 end)
 
@@ -763,7 +778,6 @@ local function criarFOV()
     end
     
     local camera = workspace.CurrentCamera
-    local viewportSize = camera.ViewportSize
     
     FOVCircle = Instance.new("Frame")
     FOVCircle.Name = "FOVCircle"
@@ -778,9 +792,9 @@ local function criarFOV()
     UICorner.Parent = FOVCircle
     
     local UIStroke = Instance.new("UIStroke")
-    UIStroke.Color = Color3.fromRGB(255, 100, 100)
+    UIStroke.Color = Color3.fromRGB(20, 40, 120)
     UIStroke.Thickness = 2
-    UIStroke.Transparency = 0.3
+    UIStroke.Transparency = 0.1
     UIStroke.Parent = FOVCircle
 end
 
@@ -803,7 +817,6 @@ end
 
 --// SISTEMA ESP ITENS
 local ESPItensAtivo = false
-local ESPItensToggle
 local verItensConexoes = {}
 local ESPs = {}
 
@@ -926,6 +939,652 @@ local function iniciarESPItens()
         removerUI(player)
     end)
 end
+
+--// SISTEMA SPEED HACK
+local speedAtivo = false
+local speedValor = 16
+
+local function atualizarSpeed()
+    local char = LocalPlayer.Character
+    if char and char:FindFirstChild("Humanoid") then
+        char.Humanoid.WalkSpeed = speedAtivo and speedValor or 16
+    end
+end
+
+LocalPlayer.CharacterAdded:Connect(function(char)
+    local humanoid = char:WaitForChild("Humanoid")
+    humanoid.WalkSpeed = speedAtivo and speedValor or 16
+end)
+
+RunService.Heartbeat:Connect(function()
+    if speedAtivo then
+        atualizarSpeed()
+    end
+end)
+
+--// SISTEMA NOCLIP
+local NoclipAtivo = false
+local noclipConnection
+
+local function iniciarNoclip()
+    if noclipConnection then
+        noclipConnection:Disconnect()
+    end
+    
+    noclipConnection = RunService.Stepped:Connect(function()
+        if NoclipAtivo and LocalPlayer.Character then
+            for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end)
+end
+
+local function pararNoclip()
+    if noclipConnection then
+        noclipConnection:Disconnect()
+        noclipConnection = nil
+    end
+    
+    if LocalPlayer.Character then
+        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+    end
+end
+
+--// SISTEMA ANTI REVISTAR
+local AntiRevistarAtivo = false
+local antiRevistarConnection
+
+local function iniciarAntiRevistar()
+    if antiRevistarConnection then
+        antiRevistarConnection:Disconnect()
+    end
+    
+    antiRevistarConnection = RunService.Heartbeat:Connect(function()
+        if AntiRevistarAtivo and LocalPlayer.Character then
+            local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+            if humanoid and humanoid.Health < 5 then
+                LocalPlayer:Kick("💀 Você foi kickado automaticamente por ser muito burro! (Vida menor que 5)")
+            end
+        end
+    end)
+end
+
+local function pararAntiRevistar()
+    if antiRevistarConnection then
+        antiRevistarConnection:Disconnect()
+        antiRevistarConnection = nil
+    end
+end
+
+--// SISTEMA AIMBOT PC
+local AimbotPCAtivo = false
+
+local function iniciarAimbotPC()
+    local Camera = workspace.CurrentCamera
+    local Mouse = LocalPlayer:GetMouse()
+
+    local AnguloMaximo = math.rad(20)
+
+    local function getFOV(p0, p1, deg)
+        local x1, y1, z1 = p0:ToOrientation()
+        local cf = CFrame.new(p0.p, p1.p)
+        local x2, y2, z2 = cf:ToOrientation()
+        if deg then
+            return Vector3.new(math.deg(x1 - x2), math.deg(y1 - y2), math.deg(z1 - z2))
+        else
+            return Vector3.new((x1 - x2), (y1 - y2), (z1 - z2))
+        end
+    end
+
+    local function checkFOV(part)
+        local fov = getFOV(Camera.CFrame, part.CFrame)
+        local angle = math.abs(fov.X) + math.abs(fov.Y)
+        return angle
+    end
+
+    local function aimAt(part)
+        Camera.CFrame = CFrame.new(Camera.CFrame.Position, part.Position)
+    end
+
+    local Aiming = false
+    local AimPart = nil
+
+    Mouse.Button2Down:Connect(function()
+        if not AimbotPCAtivo then return end
+        Aiming = true
+        local closest = nil
+        local smallest = AnguloMaximo
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
+                local hum = plr.Character:FindFirstChildOfClass("Humanoid")
+                if hum and hum.Health > 0 then
+                    local ang = checkFOV(plr.Character.Head)
+                    if ang < smallest then
+                        smallest = ang
+                        closest = plr.Character.Head
+                    end
+                end
+            end
+        end
+        AimPart = closest
+    end)
+
+    Mouse.Button2Up:Connect(function()
+        Aiming = false
+        AimPart = nil
+    end)
+
+    RunService.RenderStepped:Connect(function()
+        if AimbotPCAtivo and Aiming and AimPart then
+            if AimPart.Parent and AimPart.Parent:FindFirstChildOfClass("Humanoid") and AimPart.Parent:FindFirstChildOfClass("Humanoid").Health > 0 then
+                aimAt(AimPart)
+            else
+                AimPart = nil
+            end
+        end
+    end)
+end
+
+--// SISTEMA AIMBOT MOBILE
+local AimbotMobileAtivo = false
+local aimbotMobileConnection
+
+local function iniciarAimbotMobile()
+    if aimbotMobileConnection then
+        aimbotMobileConnection:Disconnect()
+    end
+    
+    local Camera = workspace.CurrentCamera
+    
+    aimbotMobileConnection = RunService.RenderStepped:Connect(function()
+        if AimbotMobileAtivo then
+            local melhorAlvo = nil
+            local menorDistancia = math.huge
+            local posicaoCamera = Camera.CFrame.Position
+            local direcaoCamera = Camera.CFrame.LookVector
+            
+            for _, jogador in pairs(Players:GetPlayers()) do
+                if jogador ~= LocalPlayer and jogador.Character and jogador.Character:FindFirstChild("Head") then
+                    local humanoide = jogador.Character:FindFirstChildOfClass("Humanoid")
+                    if humanoide and humanoide.Health > 0 then
+                        local posicaoAlvo = jogador.Character.Head.Position
+                        local direcaoParaAlvo = (posicaoAlvo - posicaoCamera).Unit
+                        local produtoEscalar = direcaoCamera:Dot(direcaoParaAlvo)
+                        
+                        if produtoEscalar > 0.5 then
+                            local distancia = (posicaoAlvo - posicaoCamera).Magnitude
+                            if distancia < menorDistancia then
+                                menorDistancia = distancia
+                                melhorAlvo = jogador.Character.Head
+                            end
+                        end
+                    end
+                end
+            end
+            
+            if melhorAlvo then
+                local novaCFrame = CFrame.new(Camera.CFrame.Position, melhorAlvo.Position)
+                Camera.CFrame = Camera.CFrame:Lerp(novaCFrame, 0.3)
+            end
+        end
+    end)
+end
+
+local function pararAimbotMobile()
+    if aimbotMobileConnection then
+        aimbotMobileConnection:Disconnect()
+        aimbotMobileConnection = nil
+    end
+end
+
+--// SISTEMA TP KILL
+local TPKillAtivo = false
+
+local function iniciarTPKill()
+    local teleportAutoAtivo = true
+    local ultimoMorto = nil
+    local jaTeleportou = false
+
+    local function teleportarParaMorto()
+        if not teleportAutoAtivo or not ultimoMorto or jaTeleportou then return end
+        
+        local char = LocalPlayer.Character
+        if char and char:FindFirstChild("HumanoidRootPart") then
+            if ultimoMorto.Character and ultimoMorto.Character:FindFirstChild("HumanoidRootPart") then
+                char.HumanoidRootPart.CFrame = ultimoMorto.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+                jaTeleportou = true
+            end
+        end
+    end
+
+    local function monitorarKills(jogador)
+        if jogador == LocalPlayer then return end
+        
+        local function morte(char)
+            local humanoid = char:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid.Died:Connect(function()
+                    local killer = humanoid:FindFirstChild("creator") or humanoid:FindFirstChild("Creator")
+                    if killer and killer.Value == LocalPlayer then
+                        ultimoMorto = jogador
+                        jaTeleportou = false
+                        teleportarParaMorto()
+                    end
+                end)
+            end
+        end
+        
+        jogador.CharacterAdded:Connect(morte)
+        if jogador.Character then morte(jogador.Character) end
+    end
+
+    for _, jogador in pairs(Players:GetPlayers()) do
+        monitorarKills(jogador)
+    end
+
+    Players.PlayerAdded:Connect(monitorarKills)
+
+    RunService.Heartbeat:Connect(function()
+        if teleportAutoAtivo and ultimoMorto and not jaTeleportou then
+            teleportarParaMorto()
+        end
+    end)
+end
+
+--// SISTEMA AUTO REVISTAR
+local AutoRevistarAtivo = false
+local revistarCoroutine = nil
+local detectados = {}
+local DETECTION_RADIUS = 20
+local CheckInterval = 1
+
+local function isDead(player)
+    if player.Character then
+        local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+        return humanoid and humanoid.Health <= 0
+    end
+    return false
+end
+
+local function distanceBetween(pos1, pos2)
+    return (pos1 - pos2).Magnitude
+end
+
+local function pararRevistar()
+    AutoRevistarAtivo = false
+    if revistarCoroutine then
+        coroutine.close(revistarCoroutine)
+        revistarCoroutine = nil
+    end
+    detectados = {}
+end
+
+local function iniciarRevistar()
+    if revistarCoroutine then return end
+    AutoRevistarAtivo = true
+    
+    local dsada = game:GetService("ReplicatedStorage"):FindFirstChild("RemoteNovos") and 
+                  game:GetService("ReplicatedStorage").RemoteNovos:FindFirstChild("bixobrabo")
+    
+    revistarCoroutine = coroutine.create(function()
+        while AutoRevistarAtivo do
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChild("HumanoidRootPart") then
+                local pos = char.HumanoidRootPart.Position
+                for _, otherPlayer in pairs(Players:GetPlayers()) do
+                    if otherPlayer ~= LocalPlayer and isDead(otherPlayer) and 
+                       otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                        local otherPos = otherPlayer.Character.HumanoidRootPart.Position
+                        if distanceBetween(pos, otherPos) <= DETECTION_RADIUS then
+                            if not detectados[otherPlayer] then
+                                detectados[otherPlayer] = true
+                                if dsada then
+                                    pcall(function()
+                                        dsada:FireServer("/revistar morto")
+                                    end)
+                                end
+                            end
+                        else
+                            detectados[otherPlayer] = nil
+                        end
+                    end
+                end
+            end
+            wait(CheckInterval)
+        end
+    end)
+    coroutine.resume(revistarCoroutine)
+end
+
+--// Adicionar componentes na tab COMBATE
+
+-- Hit Box Corrigido
+local HitBoxToggle = AddToggle(TabCombate, "Hit Box", function(v)
+    HitBoxAtivo = v
+    if v then
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                criarHitBox(player)
+            end
+        end
+    else
+        limparTodasHitBoxes()
+    end
+end)
+
+AddSlider(TabCombate, "Tamanho Hit Box", 4, 20, 8, function(v)
+    HitBoxTamanho = v
+    for _, box in pairs(hitboxes) do
+        if box and box.Parent then
+            box.Size = Vector3.new(HitBoxTamanho, HitBoxTamanho, HitBoxTamanho)
+        end
+    end
+end)
+
+-- FOV
+AddToggle(TabCombate, "FOV Circle", function(v)
+    FOVAtivo = v
+    atualizarFOV()
+end)
+
+AddSlider(TabCombate, "Tamanho FOV", 50, 700, 100, function(v)
+    FOVTamanho = v
+    atualizarFOV()
+end)
+
+-- Speed Hack
+AddToggle(TabCombate, "Speed Hack", function(v)
+    speedAtivo = v
+    atualizarSpeed()
+end)
+
+AddSlider(TabCombate, "Velocidade", 16, 400, 16, function(v)
+    speedValor = v
+    if speedAtivo then
+        atualizarSpeed()
+    end
+end)
+
+-- Noclip
+AddToggle(TabCombate, "Noclip", function(v)
+    NoclipAtivo = v
+    if v then
+        iniciarNoclip()
+    else
+        pararNoclip()
+    end
+end)
+
+-- Anti Revistar
+AddToggle(TabCombate, "Anti Revistar", function(v)
+    AntiRevistarAtivo = v
+    if v then
+        iniciarAntiRevistar()
+    else
+        pararAntiRevistar()
+    end
+end)
+
+-- Aimbot PC
+AddToggle(TabCombate, "Aimbot PC", function(v)
+    AimbotPCAtivo = v
+    if v then
+        iniciarAimbotPC()
+    end
+end)
+
+-- Aimbot Mobile
+AddToggle(TabCombate, "Aimbot Mobile", function(v)
+    AimbotMobileAtivo = v
+    if v then
+        iniciarAimbotMobile()
+    else
+        pararAimbotMobile()
+    end
+end)
+
+-- TP Kill
+AddToggle(TabCombate, "TP Kill", function(v)
+    TPKillAtivo = v
+    if v then
+        iniciarTPKill()
+    end
+end)
+
+-- Auto Revistar
+AddToggle(TabCombate, "Auto Revistar", function(v)
+    if v then
+        iniciarRevistar()
+    else
+        pararRevistar()
+    end
+end)
+
+-- Botão Auto Roubar Inv PC
+AddButton(TabCombate, "Auto Roubar Inv PC", function()
+    game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("NotifyGui"):Destroy()
+
+    local NotifyBackup = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("NotifyGui") and game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("NotifyGui"):Clone()
+
+    game:GetService("RunService").Heartbeat:Connect(function()
+        for _, Item in ipairs({
+            "Glock 17", "Hi Power", "AK47", "PARAFAL", "Uzi", "G3", "IA2",
+            string.char(65, 82, 45, 49, 53),
+            "Faca", "Natalina", "Lockpick", "Escudo", "Skate", "Planta Suja",
+            "Planta Limpa", "Tratamento"
+        }) do
+            game:GetService("ReplicatedStorage").Modules.InvRemotes.InvRequest:InvokeServer("mudaInv", "3", Item, "1")
+            task.wait(0.1)
+        end
+    end)
+end)
+
+-- Botão Auto Roubar Inv Mobile
+AddButton(TabCombate, "Auto Roubar Inv Mobile", function()
+    local Players = game:GetService("Players")
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local RunService = game:GetService("RunService")
+
+    local LocalPlayer = Players.LocalPlayer
+
+    local function SafeDestroyNotify()
+        local gui = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("NotifyGui")
+        if gui then
+            gui:Destroy()
+        end
+    end
+
+    local function BackupNotify()
+        local gui = LocalPlayer.PlayerGui:FindFirstChild("NotifyGui")
+        if gui then
+            return gui:Clone()
+        end
+    end
+
+    SafeDestroyNotify()
+    local NotifyBackup = BackupNotify()
+
+    RunService.Heartbeat:Connect(function()
+        local itens = {
+            "Glock 17", "Hi Power", "AK47", "PARAFAL", "Uzi", "G3", "IA2",
+            string.char(65, 82, 45, 49, 53),
+            "Faca", "Natalina", "Lockpick", "Escudo", "Skate", "Planta Suja",
+            "Planta Limpa", "Tratamento"
+        }
+
+        for _, Item in ipairs(itens) do
+            local success, err = pcall(function()
+                ReplicatedStorage.Modules.InvRemotes.InvRequest:InvokeServer("mudaInv", "3", Item, "1")
+            end)
+            if not success then
+                warn("Erro ao adicionar item:", Item, err)
+            end
+            task.wait(0.1)
+        end
+    end)
+end)
+
+--// Adicionar componentes na tab VISUAL
+
+-- ESP Itens
+AddToggle(TabVisual, "ESP Itens & Name", function(v)
+    ESPItensAtivo = v
+    if v then
+        iniciarESPItens()
+    else
+        limparESPItens()
+    end
+end)
+
+
+--// Adicionar componentes na tab CONFIG
+
+-- Anti Lag
+AddButton(TabConfig, "Anti Lag", function()
+    local RunService = game:GetService("RunService")
+    local Lighting = game:GetService("Lighting")
+    local Players = game:GetService("Players")
+    local Workspace = game:GetService("Workspace")
+    local Terrain = Workspace:FindFirstChildOfClass("Terrain")
+    local LocalPlayer = Players.LocalPlayer
+
+    if game.CoreGui:FindFirstChild("AntiLagUI") then
+        game.CoreGui.AntiLagUI:Destroy()
+    end
+
+    for _, v in pairs(Workspace:GetDescendants()) do
+        if v:IsA("Texture") or v:IsA("Decal") then
+            v.Transparency = 1
+        end
+    end
+
+    for _, v in ipairs(Workspace:GetDescendants()) do
+        if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Beam") or v:IsA("Explosion") then
+            v.Enabled = false
+        end
+    end
+
+    Lighting.GlobalShadows = false
+    Lighting.Brightness = 0
+    Lighting.EnvironmentDiffuseScale = 0
+    Lighting.EnvironmentSpecularScale = 0
+    Lighting.OutdoorAmbient = Color3.new(0.5, 0.5, 0.5)
+    Lighting.FogEnd = 999999
+    Lighting.ClockTime = 12
+    Lighting.ShadowSoftness = 0
+    Lighting.ExposureCompensation = 0
+
+    for _, obj in ipairs(Lighting:GetChildren()) do
+        if obj:IsA("BloomEffect") or obj:IsA("SunRaysEffect") or obj:IsA("ColorCorrectionEffect") or obj:IsA("DepthOfFieldEffect") or obj:IsA("BlurEffect") then
+            obj.Enabled = false
+        end
+    end
+
+    if Terrain then
+        Terrain.WaterWaveSize = 0
+        Terrain.WaterWaveSpeed = 0
+        Terrain.WaterTransparency = 1
+        Terrain.WaterReflectance = 0
+    end
+
+    for _, sound in ipairs(Workspace:GetDescendants()) do
+        if sound:IsA("Sound") then
+            sound.Playing = false
+            sound.Volume = 0
+        end
+    end
+
+    pcall(function()
+        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
+        settings().Rendering.TextureQuality = Enum.TextureQuality.Low
+        settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Low
+        settings().Rendering.EditQualityLevel = Enum.QualityLevel.Level01
+        settings().Rendering.GrassDetail = Enum.GrassDetailLevel.Low
+        settings().Rendering.ShadowSoftness = 0
+    end)
+
+    Workspace.StreamingEnabled = true
+    Workspace.StreamingMinRadius = 40
+    Workspace.StreamingTargetRadius = 80
+    Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Enabled
+
+    for _, obj in ipairs(Workspace:GetDescendants()) do
+        if obj:IsA("Script") and not obj:IsDescendantOf(LocalPlayer.Character) then
+            pcall(function() obj.Disabled = true end)
+        end
+    end
+
+    task.spawn(function()
+        while task.wait(5) do
+            collectgarbage("collect")
+        end
+    end)
+
+    pcall(function()
+        settings().Physics.AllowSleep = true
+        settings().Physics.ThrottleAdjustTime = 10
+        settings().Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Always
+    end)
+
+    if setfpscap then
+        setfpscap(60)
+    end
+
+    for _, part in ipairs(Workspace:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.Material = Enum.Material.Plastic
+            part.Reflectance = 0
+        end
+    end
+
+    local function optimizeChar(char)
+        for _, v in ipairs(char:GetDescendants()) do
+            if v:IsA("Accessory") or v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("CharacterMesh") then
+                pcall(function() v:Destroy() end)
+            end
+        end
+    end
+    optimizeChar(LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait())
+    LocalPlayer.CharacterAdded:Connect(optimizeChar)
+
+    local gui = Instance.new("ScreenGui", game.CoreGui)
+    gui.Name = "AntiLagUI"
+
+    local frame = Instance.new("Frame", gui)
+    frame.Size = UDim2.new(0, 220, 0, 50)
+    frame.Position = UDim2.new(0.5, -110, 0, 20)
+    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    frame.BackgroundTransparency = 0.25
+    frame.BorderSizePixel = 0
+    frame.Active = true
+    frame.Draggable = true
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
+
+    local label = Instance.new("TextLabel", frame)
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.Text = "⚙️ Anti-Lag Supremo Ativado (60+ FPS)"
+    label.TextColor3 = Color3.new(1, 1, 1)
+    label.TextSize = 16
+    label.Font = Enum.Font.GothamBold
+
+    local lastCheck = tick()
+    RunService.RenderStepped:Connect(function(dt)
+        if tick() - lastCheck > 1 then
+            lastCheck = tick()
+            if setfpscap then
+                setfpscap(60)
+            end
+        end
+    end)
+end)
 
 --// SISTEMA ESP LINE
 local ESPLineAtivo = false
@@ -1511,526 +2170,7 @@ local function iniciarFPSPingUI()
     FPSPingUI = ScreenGui
 end
 
---// SISTEMA SPEED HACK
-local speedAtivo = false
-local speedValor = 16
-
-local function atualizarSpeed()
-    local char = LocalPlayer.Character
-    if char and char:FindFirstChild("Humanoid") then
-        char.Humanoid.WalkSpeed = speedAtivo and speedValor or 16
-    end
-end
-
-LocalPlayer.CharacterAdded:Connect(function(char)
-    local humanoid = char:WaitForChild("Humanoid")
-    humanoid.WalkSpeed = speedAtivo and speedValor or 16
-end)
-
-RunService.Heartbeat:Connect(function()
-    if speedAtivo then
-        atualizarSpeed()
-    end
-end)
-
---// SISTEMA NOCLIP
-local NoclipAtivo = false
-local noclipConnection
-
-local function iniciarNoclip()
-    if noclipConnection then
-        noclipConnection:Disconnect()
-    end
-    
-    noclipConnection = RunService.Stepped:Connect(function()
-        if NoclipAtivo and LocalPlayer.Character then
-            for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = false
-                end
-            end
-        end
-    end)
-end
-
-local function pararNoclip()
-    if noclipConnection then
-        noclipConnection:Disconnect()
-        noclipConnection = nil
-    end
-    
-    if LocalPlayer.Character then
-        for _, part in pairs(LocalPlayer.Character:GetDescendants()) do
-            if part:IsA("BasePart") then
-                part.CanCollide = true
-            end
-        end
-    end
-end
-
---// SISTEMA ANTI REVISTAR
-local AntiRevistarAtivo = false
-local antiRevistarConnection
-
-local function iniciarAntiRevistar()
-    if antiRevistarConnection then
-        antiRevistarConnection:Disconnect()
-    end
-    
-    antiRevistarConnection = RunService.Heartbeat:Connect(function()
-        if AntiRevistarAtivo and LocalPlayer.Character then
-            local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-            if humanoid and humanoid.Health < 5 then
-                LocalPlayer:Kick("💀 Você foi kickado automaticamente por ser muito burro! (Vida menor que 5)")
-            end
-        end
-    end)
-end
-
-local function pararAntiRevistar()
-    if antiRevistarConnection then
-        antiRevistarConnection:Disconnect()
-        antiRevistarConnection = nil
-    end
-end
-
---// SISTEMA AIMBOT PC
-local AimbotPCAtivo = false
-local AimbotPCToggle
-
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
-local Mouse = LocalPlayer:GetMouse()
-
-local AimbotAtivo = true
-local AnguloMaximo = math.rad(20)
-
-local function getFOV(p0, p1, deg)
-    local x1, y1, z1 = p0:ToOrientation()
-    local cf = CFrame.new(p0.p, p1.p)
-    local x2, y2, z2 = cf:ToOrientation()
-    if deg then
-        return Vector3.new(math.deg(x1 - x2), math.deg(y1 - y2), math.deg(z1 - z2))
-    else
-        return Vector3.new((x1 - x2), (y1 - y2), (z1 - z2))
-    end
-end
-
-local function checkFOV(part)
-    local fov = getFOV(Camera.CFrame, part.CFrame)
-    local angle = math.abs(fov.X) + math.abs(fov.Y)
-    return angle
-end
-
-local function aimAt(part)
-    Camera.CFrame = CFrame.new(Camera.CFrame.Position, part.Position)
-end
-
-local Aiming = false
-local AimPart = nil
-
-local function iniciarAimbotPC()
-    Mouse.Button2Down:Connect(function()
-        if not AimbotPCAtivo then return end
-        Aiming = true
-        local closest = nil
-        local smallest = AnguloMaximo
-        for _, plr in pairs(Players:GetPlayers()) do
-            if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("Head") then
-                local hum = plr.Character:FindFirstChildOfClass("Humanoid")
-                if hum and hum.Health > 0 then
-                    local ang = checkFOV(plr.Character.Head)
-                    if ang < smallest then
-                        smallest = ang
-                        closest = plr.Character.Head
-                    end
-                end
-            end
-        end
-        AimPart = closest
-    end)
-
-    Mouse.Button2Up:Connect(function()
-        Aiming = false
-        AimPart = nil
-    end)
-
-    RunService.RenderStepped:Connect(function()
-        if AimbotPCAtivo and Aiming and AimPart then
-            if AimPart.Parent and AimPart.Parent:FindFirstChildOfClass("Humanoid") and AimPart.Parent:FindFirstChildOfClass("Humanoid").Health > 0 then
-                aimAt(AimPart)
-            else
-                AimPart = nil
-            end
-        end
-    end)
-end
-
---// SISTEMA AIMBOT MOBILE
-local AimbotMobileAtivo = false
-local AimbotMobileToggle
-local aimbotMobileConnection
-
-local function iniciarAimbotMobile()
-    if aimbotMobileConnection then
-        aimbotMobileConnection:Disconnect()
-    end
-    
-    local Camera = workspace.CurrentCamera
-    
-    aimbotMobileConnection = RunService.RenderStepped:Connect(function()
-        if AimbotMobileAtivo then
-            local melhorAlvo = nil
-            local menorDistancia = math.huge
-            local posicaoCamera = Camera.CFrame.Position
-            local direcaoCamera = Camera.CFrame.LookVector
-            
-            for _, jogador in pairs(Players:GetPlayers()) do
-                if jogador ~= LocalPlayer and jogador.Character and jogador.Character:FindFirstChild("Head") then
-                    local humanoide = jogador.Character:FindFirstChildOfClass("Humanoid")
-                    if humanoide and humanoide.Health > 0 then
-                        local posicaoAlvo = jogador.Character.Head.Position
-                        local direcaoParaAlvo = (posicaoAlvo - posicaoCamera).Unit
-                        local produtoEscalar = direcaoCamera:Dot(direcaoParaAlvo)
-                        
-                        if produtoEscalar > 0.5 then
-                            local distancia = (posicaoAlvo - posicaoCamera).Magnitude
-                            if distancia < menorDistancia then
-                                menorDistancia = distancia
-                                melhorAlvo = jogador.Character.Head
-                            end
-                        end
-                    end
-                end
-            end
-            
-            if melhorAlvo then
-                local novaCFrame = CFrame.new(Camera.CFrame.Position, melhorAlvo.Position)
-                Camera.CFrame = Camera.CFrame:Lerp(novaCFrame, 0.3)
-            end
-        end
-    end)
-end
-
-local function pararAimbotMobile()
-    if aimbotMobileConnection then
-        aimbotMobileConnection:Disconnect()
-        aimbotMobileConnection = nil
-    end
-end
-
---// SISTEMA TP KILL
-local TPKillAtivo = false
-local TPKillToggle
-
-local function iniciarTPKill()
-    local Players = game:GetService("Players")
-    local RunService = game:GetService("RunService")
-    local LocalPlayer = Players.LocalPlayer
-
-    local teleportAutoAtivo = true
-    local ultimoMorto = nil
-    local jaTeleportou = false
-
-    local function teleportarParaMorto()
-        if not teleportAutoAtivo or not ultimoMorto or jaTeleportou then return end
-        
-        local char = LocalPlayer.Character
-        if char and char:FindFirstChild("HumanoidRootPart") then
-            if ultimoMorto.Character and ultimoMorto.Character:FindFirstChild("HumanoidRootPart") then
-                char.HumanoidRootPart.CFrame = ultimoMorto.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)
-                jaTeleportou = true
-                print("🎯 Teleportado para: " .. ultimoMorto.Name)
-            end
-        end
-    end
-
-    local function monitorarKills(jogador)
-        if jogador == LocalPlayer then return end
-        
-        local function morte(char)
-            local humanoid = char:FindFirstChildOfClass("Humanoid")
-            if humanoid then
-                humanoid.Died:Connect(function()
-                    local killer = humanoid:FindFirstChild("creator") or humanoid:FindFirstChild("Creator")
-                    if killer and killer.Value == LocalPlayer then
-                        ultimoMorto = jogador
-                        jaTeleportou = false
-                        print("🎯 Eliminou: " .. jogador.Name)
-                        teleportarParaMorto()
-                    end
-                end)
-            end
-        end
-        
-        jogador.CharacterAdded:Connect(morte)
-        if jogador.Character then morte(jogador.Character) end
-    end
-
-    for _, jogador in pairs(Players:GetPlayers()) do
-        monitorarKills(jogador)
-    end
-
-    Players.PlayerAdded:Connect(monitorarKills)
-
-    RunService.Heartbeat:Connect(function()
-        if teleportAutoAtivo and ultimoMorto and not jaTeleportou then
-            teleportarParaMorto()
-        end
-    end)
-
-    print("🎯 TP Kill Ativo - Teleporta automaticamente após eliminar jogadores")
-end
-
---// SISTEMA AUTO REVISTAR
-local AutoRevistarAtivo = false
-local AutoRevistarToggle
-local revistarCoroutine = nil
-local detectados = {}
-local DETECTION_RADIUS = 20
-local CheckInterval = 1
-
-local function isDead(player)
-    if player.Character then
-        local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-        return humanoid and humanoid.Health <= 0
-    end
-    return false
-end
-
-local function distanceBetween(pos1, pos2)
-    return (pos1 - pos2).Magnitude
-end
-
-local function notificar(titulo, mensagem, duracao)
-    print("[" .. titulo .. "] " .. mensagem)
-end
-
-local function pararRevistar()
-    AutoRevistarAtivo = false
-    if revistarCoroutine then
-        coroutine.close(revistarCoroutine)
-        revistarCoroutine = nil
-    end
-    detectados = {}
-end
-
-local function iniciarRevistar()
-    if revistarCoroutine then return end
-    AutoRevistarAtivo = true
-    
-    local dsada = game:GetService("ReplicatedStorage"):FindFirstChild("RemoteNovos") and 
-                  game:GetService("ReplicatedStorage").RemoteNovos:FindFirstChild("bixobrabo")
-    
-    revistarCoroutine = coroutine.create(function()
-        while AutoRevistarAtivo do
-            local char = LocalPlayer.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                local pos = char.HumanoidRootPart.Position
-                for _, otherPlayer in pairs(Players:GetPlayers()) do
-                    if otherPlayer ~= LocalPlayer and isDead(otherPlayer) and 
-                       otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local otherPos = otherPlayer.Character.HumanoidRootPart.Position
-                        if distanceBetween(pos, otherPos) <= DETECTION_RADIUS then
-                            if not detectados[otherPlayer] then
-                                detectados[otherPlayer] = true
-                                if dsada then
-                                    pcall(function()
-                                        dsada:FireServer("/revistar morto")
-                                        print("🔍 Revistando: " .. otherPlayer.Name)
-                                    end)
-                                end
-                            end
-                        else
-                            detectados[otherPlayer] = nil
-                        end
-                    end
-                end
-            end
-            wait(CheckInterval)
-        end
-    end)
-    coroutine.resume(revistarCoroutine)
-    notificar("Revistar Automático", "Ativado!", 2)
-end
-
---// Adicionar componentes na tab COMBATE
-
--- Hit Box Corrigido
-AddToggle(TabCombate, "Hit Box", function(v)
-    HitBoxAtivo = v
-    if v then
-        for _, player in pairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer then
-                criarHitBox(player)
-            end
-        end
-    else
-        limparTodasHitBoxes()
-    end
-end)
-
-AddSlider(TabCombate, "Tamanho Hit Box", 4, 20, 8, function(v)
-    HitBoxTamanho = v
-    for _, box in pairs(hitboxes) do
-        if box and box.Parent then
-            box.Size = Vector3.new(HitBoxTamanho, HitBoxTamanho, HitBoxTamanho)
-        end
-    end
-end)
-
--- FOV
-AddToggle(TabCombate, "FOV Circle", function(v)
-    FOVAtivo = v
-    atualizarFOV()
-end)
-
-AddSlider(TabCombate, "Tamanho FOV", 50, 300, 100, function(v)
-    FOVTamanho = v
-    atualizarFOV()
-end)
-
--- Speed Hack
-AddToggle(TabCombate, "Speed Hack", function(v)
-    speedAtivo = v
-    atualizarSpeed()
-end)
-
-AddSlider(TabCombate, "Velocidade", 16, 400, 16, function(v)
-    speedValor = v
-    if speedAtivo then
-        atualizarSpeed()
-    end
-end)
-
--- Noclip
-AddToggle(TabCombate, "Noclip", function(v)
-    NoclipAtivo = v
-    if v then
-        iniciarNoclip()
-    else
-        pararNoclip()
-    end
-end)
-
--- Anti Revistar
-AddToggle(TabCombate, "Anti Revistar", function(v)
-    AntiRevistarAtivo = v
-    if v then
-        iniciarAntiRevistar()
-    else
-        pararAntiRevistar()
-    end
-end)
-
-AimbotPCToggle = AddToggle(TabCombate, "Aimbot PC", function(v)
-    AimbotPCAtivo = v
-    if v then
-        iniciarAimbotPC()
-    end
-end)
-
-AimbotMobileToggle = AddToggle(TabCombate, "Aimbot Mobile", function(v)
-    AimbotMobileAtivo = v
-    if v then
-        iniciarAimbotMobile()
-    else
-        pararAimbotMobile()
-    end
-end)
-
-TPKillToggle = AddToggle(TabCombate, "TP Kill", function(v)
-    TPKillAtivo = v
-    if v then
-        iniciarTPKill()
-    end
-end)
-
-AutoRevistarToggle = AddToggle(TabCombate, "Auto Revistar", function(v)
-    if v then
-        iniciarRevistar()
-    else
-        pararRevistar()
-    end
-end)
-
--- Botão Auto Roubar Inv PC
-AddButton(TabCombate, "Auto Roubar Inv PC", function()
-    game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("NotifyGui"):Destroy()
-
-    local NotifyBackup = game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("NotifyGui") and game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("NotifyGui"):Clone()
-
-    game:GetService("RunService").Heartbeat:Connect(function()
-        for _, Item in ipairs({
-            "Glock 17", "Hi Power", "AK47", "PARAFAL", "Uzi", "G3", "IA2",
-            string.char(65, 82, 45, 49, 53),
-            "Faca", "Natalina", "Lockpick", "Escudo", "Skate", "Planta Suja",
-            "Planta Limpa", "Tratamento"
-        }) do
-            game:GetService("ReplicatedStorage").Modules.InvRemotes.InvRequest:InvokeServer("mudaInv", "3", Item, "1")
-            task.wait(0.1)
-        end
-    end)
-end)
-
--- Botão Auto Roubar Inv Mobile
-AddButton(TabCombate, "Auto Roubar Inv Mobile", function()
-    local Players = game:GetService("Players")
-    local ReplicatedStorage = game:GetService("ReplicatedStorage")
-    local RunService = game:GetService("RunService")
-
-    local LocalPlayer = Players.LocalPlayer
-
-    local function SafeDestroyNotify()
-        local gui = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("NotifyGui")
-        if gui then
-            gui:Destroy()
-        end
-    end
-
-    local function BackupNotify()
-        local gui = LocalPlayer.PlayerGui:FindFirstChild("NotifyGui")
-        if gui then
-            return gui:Clone()
-        end
-    end
-
-    SafeDestroyNotify()
-    local NotifyBackup = BackupNotify()
-
-    RunService.Heartbeat:Connect(function()
-        local itens = {
-            "Glock 17", "Hi Power", "AK47", "PARAFAL", "Uzi", "G3", "IA2",
-            string.char(65, 82, 45, 49, 53),
-            "Faca", "Natalina", "Lockpick", "Escudo", "Skate", "Planta Suja",
-            "Planta Limpa", "Tratamento"
-        }
-
-        for _, Item in ipairs(itens) do
-            local success, err = pcall(function()
-                ReplicatedStorage.Modules.InvRemotes.InvRequest:InvokeServer("mudaInv", "3", Item, "1")
-            end)
-            if not success then
-                warn("Erro ao adicionar item:", Item, err)
-            end
-            task.wait(0.1)
-        end
-    end)
-end)
-
---// Adicionar componentes na tab VISUAL
-
--- ESP Itens
-ESPItensToggle = AddToggle(TabVisual, "ESP Itens & Name", function(v)
-    ESPItensAtivo = v
-    if v then
-        iniciarESPItens()
-    else
-        limparESPItens()
-    end
-end)
+--// ADICIONAR OS TOGGLES FALTANTES NA TAB VISUAL
 
 -- ESP Line
 AddToggle(TabVisual, "ESP Line", function(v)
@@ -2041,7 +2181,6 @@ AddToggle(TabVisual, "ESP Line", function(v)
         ESPLine_destroyAll()
     end
 end)
-
 
 -- ESP Box 2D
 AddToggle(TabVisual, "ESP Box 2D", function(v)
@@ -2201,11 +2340,6 @@ AddButton(TabVisual, "Tp player", function()
         local text = TextBox.Text
         if text == "" or not text then return end
         local success, msg = teleportToPlayer(text)
-        if success then
-            print("[TeleportUI] " .. msg)
-        else
-            warn("[TeleportUI] " .. msg)
-        end
     end)
 
     local dragging, dragInput, dragStart, startPos
@@ -2256,149 +2390,7 @@ AddButton(TabVisual, "Abrir Bau", function()
     abrirBau()
 end)
 
---// Adicionar componentes na tab CONFIG
-
--- Anti Lag
-AddButton(TabConfig, "Anti Lag", function()
-    local RunService = game:GetService("RunService")
-    local Lighting = game:GetService("Lighting")
-    local Players = game:GetService("Players")
-    local Workspace = game:GetService("Workspace")
-    local Terrain = Workspace:FindFirstChildOfClass("Terrain")
-    local LocalPlayer = Players.LocalPlayer
-
-    if game.CoreGui:FindFirstChild("AntiLagUI") then
-        game.CoreGui.AntiLagUI:Destroy()
-    end
-
-    for _, v in pairs(Workspace:GetDescendants()) do
-        if v:IsA("Texture") or v:IsA("Decal") then
-            v.Transparency = 1
-        end
-    end
-
-    for _, v in ipairs(Workspace:GetDescendants()) do
-        if v:IsA("ParticleEmitter") or v:IsA("Trail") or v:IsA("Smoke") or v:IsA("Fire") or v:IsA("Beam") or v:IsA("Explosion") then
-            v.Enabled = false
-        end
-    end
-
-    Lighting.GlobalShadows = false
-    Lighting.Brightness = 0
-    Lighting.EnvironmentDiffuseScale = 0
-    Lighting.EnvironmentSpecularScale = 0
-    Lighting.OutdoorAmbient = Color3.new(0.5, 0.5, 0.5)
-    Lighting.FogEnd = 999999
-    Lighting.ClockTime = 12
-    Lighting.ShadowSoftness = 0
-    Lighting.ExposureCompensation = 0
-
-    for _, obj in ipairs(Lighting:GetChildren()) do
-        if obj:IsA("BloomEffect") or obj:IsA("SunRaysEffect") or obj:IsA("ColorCorrectionEffect") or obj:IsA("DepthOfFieldEffect") or obj:IsA("BlurEffect") then
-            obj.Enabled = false
-        end
-    end
-
-    if Terrain then
-        Terrain.WaterWaveSize = 0
-        Terrain.WaterWaveSpeed = 0
-        Terrain.WaterTransparency = 1
-        Terrain.WaterReflectance = 0
-    end
-
-    for _, sound in ipairs(Workspace:GetDescendants()) do
-        if sound:IsA("Sound") then
-            sound.Playing = false
-            sound.Volume = 0
-        end
-    end
-
-    pcall(function()
-        settings().Rendering.QualityLevel = Enum.QualityLevel.Level01
-        settings().Rendering.TextureQuality = Enum.TextureQuality.Low
-        settings().Rendering.MeshPartDetailLevel = Enum.MeshPartDetailLevel.Low
-        settings().Rendering.EditQualityLevel = Enum.QualityLevel.Level01
-        settings().Rendering.GrassDetail = Enum.GrassDetailLevel.Low
-        settings().Rendering.ShadowSoftness = 0
-    end)
-
-    Workspace.StreamingEnabled = true
-    Workspace.StreamingMinRadius = 40
-    Workspace.StreamingTargetRadius = 80
-    Workspace.InterpolationThrottling = Enum.InterpolationThrottlingMode.Enabled
-
-    for _, obj in ipairs(Workspace:GetDescendants()) do
-        if obj:IsA("Script") and not obj:IsDescendantOf(LocalPlayer.Character) then
-            pcall(function() obj.Disabled = true end)
-        end
-    end
-
-    task.spawn(function()
-        while task.wait(5) do
-            collectgarbage("collect")
-        end
-    end)
-
-    pcall(function()
-        settings().Physics.AllowSleep = true
-        settings().Physics.ThrottleAdjustTime = 10
-        settings().Physics.PhysicsEnvironmentalThrottle = Enum.EnviromentalPhysicsThrottle.Always
-    end)
-
-    if setfpscap then
-        setfpscap(60)
-    end
-
-    for _, part in ipairs(Workspace:GetDescendants()) do
-        if part:IsA("BasePart") then
-            part.Material = Enum.Material.Plastic
-            part.Reflectance = 0
-        end
-    end
-
-    local function optimizeChar(char)
-        for _, v in ipairs(char:GetDescendants()) do
-            if v:IsA("Accessory") or v:IsA("ShirtGraphic") or v:IsA("Shirt") or v:IsA("Pants") or v:IsA("CharacterMesh") then
-                pcall(function() v:Destroy() end)
-            end
-        end
-    end
-    optimizeChar(LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait())
-    LocalPlayer.CharacterAdded:Connect(optimizeChar)
-
-    local gui = Instance.new("ScreenGui", game.CoreGui)
-    gui.Name = "AntiLagUI"
-
-    local frame = Instance.new("Frame", gui)
-    frame.Size = UDim2.new(0, 220, 0, 50)
-    frame.Position = UDim2.new(0.5, -110, 0, 20)
-    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    frame.BackgroundTransparency = 0.25
-    frame.BorderSizePixel = 0
-    frame.Active = true
-    frame.Draggable = true
-    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 8)
-
-    local label = Instance.new("TextLabel", frame)
-    label.Size = UDim2.new(1, 0, 1, 0)
-    label.BackgroundTransparency = 1
-    label.Text = "⚙️ Anti-Lag Supremo Ativado (60+ FPS)"
-    label.TextColor3 = Color3.new(1, 1, 1)
-    label.TextSize = 16
-    label.Font = Enum.Font.GothamBold
-
-    local lastCheck = tick()
-    RunService.RenderStepped:Connect(function(dt)
-        if tick() - lastCheck > 1 then
-            lastCheck = tick()
-            if setfpscap then
-                setfpscap(60)
-            end
-        end
-    end)
-
-    print("✅ Anti-Lag Supremo ativado com sucesso! FPS estabilizado e texturas removidas.")
-end)
+--// ADICIONAR TOGGLES NA TAB CONFIG
 
 -- Mostrar FPS/Ping
 AddToggle(TabConfig, "Mostrar FPS/Ping", function(v)
@@ -2413,32 +2405,99 @@ AddToggle(TabConfig, "Mostrar FPS/Ping", function(v)
     end
 end)
 
+-- Botão para resetar todas as configurações
+AddButton(TabConfig, "Resetar Configurações", function()
+    -- Desativar todos os toggles
+    HitBoxAtivo = false
+    limparTodasHitBoxes()
+    
+    FOVAtivo = false
+    atualizarFOV()
+    
+    ESPItensAtivo = false
+    limparESPItens()
+    
+    ESPLineAtivo = false
+    ESPLine_destroyAll()
+    
+    ESPBox2DAtivo = false
+    ESPBox2D_DestroyAll()
+    
+    ESPNameAtivo = false
+    ESPName_DestroyAll()
+    
+    ESPVidaAtivo = false
+    ESPVida_DestroyAll()
+    
+    speedAtivo = false
+    atualizarSpeed()
+    
+    NoclipAtivo = false
+    pararNoclip()
+    
+    AntiRevistarAtivo = false
+    pararAntiRevistar()
+    
+    AimbotPCAtivo = false
+    AimbotMobileAtivo = false
+    pararAimbotMobile()
+    
+    TPKillAtivo = false
+    AutoRevistarAtivo = false
+    pararRevistar()
+    
+    MostrarFPSPingAtivo = false
+    if FPSPingUI then
+        FPSPingUI:Destroy()
+        FPSPingUI = nil
+    end
+    
+    -- Resetar valores dos sliders
+    HitBoxTamanho = 8
+    FOVTamanho = 100
+    speedValor = 16
+    
+    print("✅ Todas as configurações foram resetadas!")
+end)
+
+
+print("✅ Todos os sistemas ESP e Config foram carregados!")
+
 --// Arrastar Menu
 local dragging, dragInput, dragStart, startPos
 TopBar.InputBegan:Connect(function(input)
-    if input.UserInputType==Enum.UserInputType.MouseButton1 then
-        dragging=true
-        dragStart=input.Position
-        startPos=MainFrame.Position
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
         input.Changed:Connect(function()
-            if input.UserInputState==Enum.UserInputState.End then dragging=false end
+            if input.UserInputState == Enum.UserInputState.End then dragging = false end
         end)
     end
 end)
+
 TopBar.InputChanged:Connect(function(input)
-    if input.UserInputType==Enum.UserInputType.MouseMovement then dragInput=input end
-end)
-UserInputService.InputChanged:Connect(function(input)
-    if input==dragInput and dragging then
-        local delta=input.Position-dragStart
-        MainFrame.Position=UDim2.new(startPos.X.Scale,startPos.X.Offset+delta.X,startPos.Y.Scale,startPos.Y.Offset+delta.Y)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then 
+        dragInput = input 
     end
 end)
 
---// Sistema adaptativo Mobile/PC para minimizar/reabrir
-local isMobile = UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        local delta = input.Position - dragStart
+        MainFrame.Position = UDim2.new(
+            startPos.X.Scale, 
+            startPos.X.Offset + delta.X, 
+            startPos.Y.Scale, 
+            startPos.Y.Offset + delta.Y
+        )
+    end
+end)
 
--- Retângulo de reabrir (arrastável)
+--// Sistema adaptativo Mobile/PC
+local isMobile = UserInputService.TouchEnabled
+
+-- Retângulo de reabrir
 local ReopenFrame = Instance.new("Frame")
 ReopenFrame.Size = UDim2.new(0, 120, 0, 40)
 ReopenFrame.Position = UDim2.new(1, -140, 0, 20)
@@ -2456,39 +2515,16 @@ ReopenText.Font = Enum.Font.GothamBold
 ReopenText.TextSize = 16
 ReopenText.Parent = ReopenFrame
 
-if isMobile then
-    MinBtn.MouseButton1Click:Connect(function()
-        MainFrame.Visible = false
-        ReopenFrame.Visible = true
-    end)
-else
-    local minimized = false
-
-    local function toggleMenu()
-        minimized = not minimized
-        MainFrame.Visible = not minimized
-        if ReopenFrame then
-            ReopenFrame.Visible = false
-        end
-    end
-
-    UserInputService.InputBegan:Connect(function(input, gameProcessed)
-        if not gameProcessed and input.KeyCode == Enum.KeyCode.K then
-            toggleMenu()
-        end
-    end)
-end
-
---// Controle de arraste/clique para retângulo mobile
+-- Controle de arraste/clique para retângulo mobile
 local draggingReopen = false
-local dragStart, startPos
+local dragStartReopen, startPosReopen
 local moved = false
 
 local function updateDrag(input)
-	local delta = input.Position - dragStart
+	local delta = input.Position - dragStartReopen
 	ReopenFrame.Position = UDim2.new(
-		startPos.X.Scale, startPos.X.Offset + delta.X,
-		startPos.Y.Scale, startPos.Y.Offset + delta.Y
+		startPosReopen.X.Scale, startPosReopen.X.Offset + delta.X,
+		startPosReopen.Y.Scale, startPosReopen.Y.Offset + delta.Y
 	)
 	if math.abs(delta.X) > 3 or math.abs(delta.Y) > 3 then
 		moved = true
@@ -2498,8 +2534,8 @@ end
 ReopenFrame.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
 		draggingReopen = true
-		dragStart = input.Position
-		startPos = ReopenFrame.Position
+		dragStartReopen = input.Position
+		startPosReopen = ReopenFrame.Position
 		moved = false
 	end
 end)
@@ -2524,3 +2560,15 @@ MinBtn.MouseButton1Click:Connect(function()
 	MainFrame.Visible = false
 	ReopenFrame.Visible = true
 end)
+
+-- Suporte para tecla K no PC
+if not isMobile then
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if not gameProcessed and input.KeyCode == Enum.KeyCode.K then
+            MainFrame.Visible = not MainFrame.Visible
+            ReopenFrame.Visible = not MainFrame.Visible
+        end
+    end)
+end
+
+print("✅ Shark Menu Mini City V2 Carregado com Sucesso!")
